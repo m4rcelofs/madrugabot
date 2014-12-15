@@ -1,3 +1,5 @@
+var colors = require('irc-colors').global();
+
 module.exports = {
   onMessage: function (from, to, text, client) {
 	  if(text && /^\.[a-z]+/.test(text)) {
@@ -42,6 +44,44 @@ var download = function(url, callback) {
 	}); 
 };
 
+var sendOrders = function(data, to, client) {
+	var toSay = 'Ministério da Defesa - Ordens de Batalha'.irc.bold.bgred() + '\n';
+	var lines = data.split('\n');
+	for(var i=0; i< lines.length; i++) {
+		var cells = lines[i].split(',');
+		var type = ('(' + cells[2] + ')').irc.bgolive();
+		var region = cells[0].irc.bggrey();
+		var link = cells[1].irc.bggrey;
+		var ally = (cells[4] + ' ' + cells[5]).irc.bggreen();
+		var vs = 'x'.irc.bglightgray();
+		var enemy = (cells[6] + ' ' + cells[7]).irc.bgred();
+		var prio = cells[3];
+		switch(cells[3]) {
+		case 'MÁXIMA':
+			prio = prio.irc.red.bgblack();
+			break;
+		case 'ALTA':
+			prio = prio.irc.bgred();
+			break;
+		case 'MÉDIA':
+			prio = prio.irc.bgolive();
+			break;
+		case 'BAIXA':
+			prio = prio.irc.bgyellow();
+			break;
+		case 'SEGURA':
+			prio = prio.irc.bglightgreen();
+			break;
+		case 'PERDIDA':
+		case 'NÃO LUTAR':
+			prio = prio.irc.bglightgray();
+			break;
+		}
+		toSay += region + ' ' + type + ': ' + ally + vs + enemy + ' - ' + prio + ' ' + link + '\n'; 
+	}
+	client.say(to, toSay);
+}
+
 var phrases = {
 	alone: 'Cri... cri... cri...',
 	blackhigh: 'Black today,  Black tomorrow, Black forever xD',
@@ -84,16 +124,15 @@ cmd.bg = function(from, to, param, client) {
 
 cmd.md = function(from, to, param, client) {
 	var url = 'https://docs.google.com/spreadsheet/pub' +
-			  '?key=0AqkcCK_gTwjVdE5lRHlOa0c5M19nclRWQWJiOUlkWkE' +
-			  '&single=true' + 
-			  '&gid=0' +
-			  '&range=A4%3AM9' + 
-			  '&output=csv';
+				'?key=0AtKIBJ-62ILkdGNuYWNfZ2RhalVNaVltbkNTLUpEelE' +
+				'&single=true' +
+				'&gid=0' +
+				'&range=A2%3AI7' +
+				'&output=csv';
 	download(url, function(data){
-		console.log(data);
-//		client.say(to, data);
+		sendOrders(data, to, client);
 	});
-	return null;
+	return '[<o>] Buscando ordens...';
 };
 
 cmd.up = function(from, to, param, client) {
