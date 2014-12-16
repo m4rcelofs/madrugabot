@@ -5,6 +5,8 @@
 
 * **MADRUGA_HOST**: the IRC host (default 'irc.rizon.net')
 
+* **MADRUGA_PORT**: the IRC host port (default 6667)
+
 * **MADRUGA_USER**: the bot's username (default 'Madruga')
 
 * **MADRUGA_PASS**: the bot's password (optional, nickserv registered nick only)
