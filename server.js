@@ -1,24 +1,42 @@
 var irc = require('irc');
 var madruga = require('./madruga');
 
-var client = new irc.Client(process.env.MADRUGA_HOST,  process.env.MADRUGA_USER, {
-    channels: process.env.MADRUGA_CHANNELS.split(' '),
-});
+console.log('Starting MadrugaBot...');
+
+console.log('Environment is:');
+for(var env in process.env) {
+	if(/MADRUGA_\w*/.test(env)) {
+		console.log(env + ': ' + process.env[env]);
+	}
+}
+
+var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
+							process.env.MADRUGA_USER || 'Madruga', 
+	{
+    	channels: process.env.MADRUGA_CHANNELS ? 
+    				process.env.MADRUGA_CHANNELS.split(' ') : '',
+    	autoConnect: false, 
+    	showErrors: true,
+    	debug: process.env.MADRUGA_DEBUG || false,
+    	userName: 'madruga',
+    	realName: 'madruga IRC bot',
+	}
+);
 
 var identify = function(message) {
-    console.log('Registered: ' + JSON.stringify(message));
     if(process.env.MADRUGA_PASS) {
     	client.say('nickserv', 'IDENTIFY ' + process.env.MADRUGA_PASS);
-    	console.log('Sent IDENTIFY');
     }
 };
 
-var onCtcp = function (from, to, text, type, message) {
-    console.log('CTCP (' + type +'): ' + from + ' > ' + to + ', ' + JSON.stringify(message));
+var onNotice = function (nick, to, text, message) {
+	if(!process.env.MADRUGA_DEBUG){ //debug already prints those
+		console.warn(text);
+	}
 };
 
 var onError = function(message) {
-    console.log('error: ', JSON.stringify(message));
+    console.error('error: ', JSON.stringify(message));
 };
 
 var onPvt = function(from, text) {
@@ -63,12 +81,17 @@ var onMessage = function (from, to, message) {
 	}
 }; 
 
-
-
 client.addListener('registered', identify);
-client.addListener('ctcp', onCtcp);
+client.addListener('notice', onNotice);
 client.addListener('error', onError);
 
 client.addListener('pm', onPvt);
 client.addListener('message#', onMessage);
 //client.addListener('message#channel', function (from, message){});
+
+client.connect(function(){
+	console.log('Connected to ' + process.env.MADRUGA_HOST + ' as ' + process.env.MADRUGA_USER);
+});
+
+
+console.log('MadrugaBot started successfully');
