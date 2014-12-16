@@ -16,4 +16,4 @@
 * **MADRUGA_DEBUG**: debug mode (default false)
 
 
-`docker run -d --name madruga marcelofs/madrugabot` 
+`docker run -d --name madruga --net=host marcelofs/madrugabot` 
