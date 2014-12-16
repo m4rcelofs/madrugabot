@@ -101,6 +101,7 @@ var sendOrders = function(data, to, client) {
 }
 
 var phrases = {
+	abs: 'abspt',
 	alone: 'Cri... cri... cri...',
 	blackhigh: 'Black today,  Black tomorrow, Black forever xD',
 	bozo: 'VÃO TOMAR NO CU TODOS VOCÊS',
@@ -177,4 +178,10 @@ cmd.sorteio = function(from, to, param, client) {
 cmd.test = function(from, to, param, client) {
 	//example function
 	console.log('test: ' + from + ', ' + to + ', ' + param);
+	return "IT'S ALIVE!";
 };
+
+cmd.v = function(from, to, param, client) {
+	var pkg = require('./package.json');
+	return pkg.name + ' ' + pkg.version;
+}
