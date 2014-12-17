@@ -11,9 +11,7 @@ module.exports = {
 
 var parseMessage = function (from, to, text, client) {
 	var parsed = /^\.([a-z]+)\s?(.*)/.exec(text);
-	if(!parsed) {
-		return null;
-	}
+	if(!parsed) { return null; }
 	
 	var command = parsed[1];
 	var param = parsed[2];
@@ -152,6 +150,48 @@ cmd.md = function(from, to, param, client) {
 		sendOrders(data, to, client);
 	});
 	return 'Buscando ordens...';
+};
+
+cmd.nicks = function(from, to, param, client) {
+	if(!param || !/^\d+$/.test(param.trim())) { return null; }
+	param = param.trim();
+	
+	var options = {
+		hostname: 'sniper.vot.pl',
+		port: 80,
+		path: '/erepublik/names.json',
+		method: 'POST',
+		headers: {
+			'Content-Type' : 'application/x-www-form-urlencoded'
+		}
+	};
+	
+	var data = '';
+	var responseCb = function(res) {
+		res.on('data', function(chunk) {
+			data += chunk;
+		});
+		res.on('end', function() {
+			data = JSON.parse(data);
+			if(data && data.length > 0) {
+				var namesHistory = 'Achei os seguintes nomes para o jogador ' + param.irc.bold() + ': ';
+				for(var i=0; i< data.length; i++) {
+					namesHistory += data[i].name + ' (>' + data[i].erep_day + ') ';
+				}
+				client.say(to, namesHistory);
+			} else {
+				client.say(to, 'Não encontrei nicks para o jogador ' + param + '!');
+			}
+		});
+	};
+		
+	var request = require('http').request(options, responseCb);
+	request.on('error', function(e) {
+		console.error("http error: " + e.message);
+	});
+	request.write('cid=' + param);
+	
+	return null;
 };
 
 cmd.up = function(from, to, param, client) {
