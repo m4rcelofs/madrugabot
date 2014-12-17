@@ -154,9 +154,9 @@ cmd.nicks = function(from, to, param, client) {
 		} else {
 			var data = JSON.parse(body);
 			if(data && data.length > 0) {
-				var namesHistory = 'Achei os seguintes nomes para o jogador ' + param.irc.bold() + ': ';
+				var namesHistory = 'Achei os seguintes nomes para o jogador ' + param + ': ';
 				for(var i=0; i < data.length; i++) {
-					namesHistory += data[i].name + ' (>' + data[i].erep_day + ') ';
+					namesHistory += data[i].name.irc.bold() + ' (>' + data[i].erep_day + ') ';
 				}
 				client.say(to, namesHistory);
 			} else {
