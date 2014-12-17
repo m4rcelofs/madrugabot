@@ -1,4 +1,5 @@
 var colors = require('irc-colors').global();
+var request = require('request');
 
 module.exports = {
   onMessage: function (from, to, text, client) {
@@ -19,27 +20,11 @@ var parseMessage = function (from, to, text, client) {
 	if(phrases[command]) {
 		return phrases[command];
 	}
-	
 	if(cmd[command]) {
 		return cmd[command](from, to, param, client);	
-	} 
+	}
 	
 	return null;
-};
-
-var download = function(url, callback) {
-	var data = '';
-	var request = require('https').get(url, function(res) {
-		res.on('data', function(chunk) {
-			data += chunk;
-		});
-		res.on('end', function() {
-			callback(data);
-		});
-	});
-	request.on('error', function(e) {
-		console.error("Download error: " + e.message);
-	}); 
 };
 
 var sendOrders = function(data, to, client) {
@@ -96,7 +81,7 @@ var sendOrders = function(data, to, client) {
 			 flag + '\n';
 	toSay += flag + ' Planilha:  http://goo.gl/zLp8hn '.irc.yellow.bggreen() + flag;
 	client.say(to, toSay);
-}
+};
 
 var phrases = {
 	abs: 'abspt',
@@ -146,8 +131,10 @@ cmd.md = function(from, to, param, client) {
 				'&gid=0' +
 				'&range=A2%3AI8' +
 				'&output=csv';
-	download(url, function(data){
-		sendOrders(data, to, client);
+	request(url, function(error, response, body){
+		if (!error && response.statusCode === 200) {
+			sendOrders(body, to, client);
+		}
 	});
 	return 'Buscando ordens...';
 };
@@ -156,42 +143,28 @@ cmd.nicks = function(from, to, param, client) {
 	if(!param || !/^\d+$/.test(param.trim())) { return null; }
 	param = param.trim();
 	
-	var options = {
-		hostname: 'sniper.vot.pl',
-		port: 80,
-		path: '/erepublik/names.json',
-		method: 'POST',
-		headers: {
-			'Content-Type' : 'application/x-www-form-urlencoded'
+	request.post({
+		url: 'http://sniper.vot.pl/erepublik/names.json',
+		form: {
+			cid: param
 		}
-	};
-	
-	var data = '';
-	var responseCb = function(res) {
-		res.on('data', function(chunk) {
-			data += chunk;
-		});
-		res.on('end', function() {
-			data = JSON.parse(data);
+	}, function(error, response, body) {
+		if(error) {
+			client.say(to, 'O servidor de nicks está offline ): [http ' + response.statusCode + ']');
+		} else {
+			var data = JSON.parse(body);
 			if(data && data.length > 0) {
 				var namesHistory = 'Achei os seguintes nomes para o jogador ' + param.irc.bold() + ': ';
-				for(var i=0; i< data.length; i++) {
+				for(var i=0; i < data.length; i++) {
 					namesHistory += data[i].name + ' (>' + data[i].erep_day + ') ';
 				}
 				client.say(to, namesHistory);
 			} else {
 				client.say(to, 'Não encontrei nicks para o jogador ' + param + '!');
 			}
-		});
-	};
-		
-	var request = require('http').request(options, responseCb);
-	request.on('error', function(e) {
-		console.error("http error: " + e.message);
+		}
 	});
-	request.write('cid=' + param);
-	
-	return null;
+	return 'Procurando nicks...';
 };
 
 cmd.up = function(from, to, param, client) {
@@ -207,7 +180,7 @@ cmd.sorteio = function(from, to, param, client) {
 			for(var nick in nicks) {
 				array.push(nick);
 			}
-			var chosen = array[Math.floor(Math.random()*array.length)];
+			var chosen = array[Math.floor(Math.random() * array.length)];
 			client.say(to, 'Parabéns ' + chosen +', você acabou de ganhar ' + param + '!');
 		}
 	});

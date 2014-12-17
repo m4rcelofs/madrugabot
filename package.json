@@ -7,6 +7,7 @@
   "author": "Marcelo <me@marcelofs.com>",
   "dependencies": {
 	  "irc": "0.3.x",
-	  "irc-colors": "1.x.x"
+	  "irc-colors": "1.x.x",
+	  "request": "2.51.x"
   }
 }
