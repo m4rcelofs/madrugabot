@@ -48,7 +48,7 @@ var resetTimeout = function() {
 	if(timeout) {
 		clearTimeout(timeout);
 	}
-	timeout = setTimeout(reconnect, 300000); //5min
+	timeout = setTimeout(disconnect, 300000); //5min
 };
 client.addListener('ping', resetTimeout);
 client.addListener('notice', resetTimeout);
