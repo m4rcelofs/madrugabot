@@ -17,3 +17,15 @@
 
 
 `docker run -d --name madruga --net=host marcelofs/madrugabot` 
+
+## How to contribute?
+
+Send your pull request with a custom command:
+
+	[./commands/{commandName}.js]
+	module.exports = function (from, to, param, client) {
+		// do your stuff here, use client.say() if you need async messages 
+		return 'synchronous message to be sent to channel';
+	};
+
+Check `/commands` for examples.
