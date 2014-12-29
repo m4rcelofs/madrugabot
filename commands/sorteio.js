@@ -4,7 +4,10 @@ module.exports = function(from, to, param, client) {
 		if(to === channel) {
 			var array = [];
 			for(var nick in nicks) {
-				array.push(nick);
+				if(nick !== from &&
+						nick !== (process.env.MADRUGA_USER || 'Madruga')) {
+					array.push(nick);
+				}
 			}
 			var chosen = array[Math.floor(Math.random() * array.length)];
 			client.say(to, 'Parabéns ' + chosen +', você acabou de ganhar ' + param + '!');
