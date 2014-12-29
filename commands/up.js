@@ -1,4 +1,7 @@
+var moment = require('moment');
+
 module.exports = function(from, to, param, client) {
-	var uptimeHours = process.uptime() / 3600;
-	return 'Estou online por ~' + uptimeHours + 'h';
+	moment.locale('pt-br');
+	var up = moment().subtract(process.uptime(), 'seconds');
+	return 'Entrei online ' + up.fromNow();
 };
