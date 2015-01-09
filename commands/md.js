@@ -2,6 +2,7 @@ var request = require('request');
 var forAllAsync = require('forAllAsync').forAllAsync;
 var NodeCache = require('node-cache');
 var minify = require.main.require('./minify-url');
+var debug = process.env.MADRUGA_DEBUG || false;
 
 module.exports = function (from, to, param, client) {
 	var url = 'https://docs.google.com/spreadsheet/pub' +
@@ -10,8 +11,14 @@ module.exports = function (from, to, param, client) {
 	'&gid=0' +
 	'&range=A2%3AI8' +
 	'&output=csv';
+	if(debug) {
+		console.log('requesting table');
+	}
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
+			if(debug) {
+				console.log('table received');
+			}
 			minifyAll(body, to, client);
 		}
 	});
@@ -31,6 +38,9 @@ var minifyAll = function(body, to, client) {
 		}
 	}
 	
+	if(debug) {
+		console.log('starting minification of ' + JSON.stringify(toMinify));
+	}
 	forAllAsync(toMinify, minifyEach, toMinify.length).then(function(){
 		sendOrders(minifiedBody, to, client);
 	});
@@ -42,20 +52,32 @@ var minifyEach = function(complete, item, i) {
 	if(!cache.get(item)[item]) {
 		minify(item, function(body){
 			if(body) {
+				if(debug) {
+					console.log('minified ' + item + ' to ' + body.id);
+				}
 				cache.set(item, body.id, 43200); //12h
 			} else {
+				if(debug) {
+					console.log('minification for ' + item + ' failed');
+				}
 				cache.set(item, item, 60); //1min
 			}
 			minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
 			complete();
 		});	
 	} else {
+		if(debug) {
+			console.log('minification for ' + item + ' hit the cache');
+		}
 		minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
 		complete();
 	}
 };
 
 var sendOrders = function(data, to, client) {
+	if(debug) {
+		console.log('sending orders');
+	}
 	var flag = '['.irc.green.bggreen() + 
 				'<'.irc.yellow.bggreen() + 
 				'o'.irc.blue.bggreen() + 
@@ -109,4 +131,7 @@ var sendOrders = function(data, to, client) {
 			 flag + '\n';
 	toSay += flag + ' Planilha:  http://goo.gl/zLp8hn '.irc.yellow.bggreen() + flag;
 	client.say(to, toSay);
+	if(debug) {
+		console.log('orders sent');
+	}
 };
