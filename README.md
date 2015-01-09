@@ -15,6 +15,8 @@
 
 * **MADRUGA_DEBUG**: debug mode (default false)
 
+* **MADRUGA_GOOGLE_API_KEY**: Google's [URL Shortener API](https://developers.google.com/url-shortener/v1/getting_started) key (optional, default null)
+
 
 `docker run -d --name madruga --net=host marcelofs/madrugabot` 
 
