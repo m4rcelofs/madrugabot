@@ -5,15 +5,16 @@ var minify = require.main.require('./minify-url');
 var debug = process.env.MADRUGA_DEBUG || false;
 
 module.exports = function (from, to, param, client) {
+	if(debug) {
+		console.log('.md requesting table');
+	}
+	
 	var url = 'https://docs.google.com/spreadsheet/pub' +
 	'?key=0AtKIBJ-62ILkdGNuYWNfZ2RhalVNaVltbkNTLUpEelE' +
 	'&single=true' +
 	'&gid=0' +
 	'&range=A2%3AI8' +
 	'&output=csv';
-	if(debug) {
-		console.log('requesting table');
-	}
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
 			if(debug) {

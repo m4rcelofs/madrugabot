@@ -10,6 +10,7 @@ for(var env in process.env) {
 	}
 }
 
+var debug = process.env.MADRUGA_DEBUG || false;
 var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
 							process.env.MADRUGA_USER || 'Madruga', 
 	{
@@ -18,7 +19,7 @@ var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
     	port: process.env.MADRUGA_PORT || 6667,
     	autoConnect: false, 
     	showErrors: true,
-    	debug: process.env.MADRUGA_DEBUG || false,
+    	debug: debug,
     	userName: 'madruga',
     	realName: 'madruga IRC bot',
     	floodProtection: true,
@@ -86,12 +87,23 @@ client.addListener('message#', function (from, to, message) {
 		var command = parsed[1];
 		var param = parsed[2];
 		try {
+			if(debug){
+				console.log('received .'+command);
+			}
 			var cmd = require('./commands/' + command);
 			var answer = cmd(from, to, param, client);
 			if(answer) {
 				client.say(to, answer);
 			}
-		} catch(e){}
+			if(debug){
+				console.log('executed .'+command);
+			}
+		} catch(e){
+			if(debug){
+				console.log(command + '.js not found?');
+				console.log(e);
+			}
+		}
 	}
 });
 
