@@ -1,4 +1,7 @@
 var request = require('request');
+var forAllAsync = require('forAllAsync').forAllAsync;
+var NodeCache = require('node-cache');
+var minify = require.main.require('./minify-url');
 
 module.exports = function (from, to, param, client) {
 	var url = 'https://docs.google.com/spreadsheet/pub' +
@@ -9,10 +12,47 @@ module.exports = function (from, to, param, client) {
 	'&output=csv';
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
-			sendOrders(body, to, client);
+			minifyAll(body, to, client);
 		}
 	});
 	return 'Buscando ordens...';
+};
+
+var minifiedBody = '';
+var minifyAll = function(body, to, client) {
+	minifiedBody = body;
+	
+	var toMinify = [];
+	var lines = body.split('\n');
+	for(var i=0; i < lines.length - 1; i++) {
+		var cells = lines[i].split(',');
+		if(cells[1]) {
+			toMinify.push(cells[1]);			
+		}
+	}
+	
+	forAllAsync(toMinify, minifyEach, toMinify.length).then(function(){
+		sendOrders(minifiedBody, to, client);
+	});
+};
+
+var cache = new NodeCache();
+var minifyEach = function(complete, item, i) {
+	//cache.get('key') returns { "key": { my: "Special", variable: 42 } }
+	if(!cache.get(item)[item]) {
+		minify(item, function(body){
+			if(body) {
+				cache.set(item, body.id, 43200); //12h
+			} else {
+				cache.set(item, item, 60); //1min
+			}
+			minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
+			complete();
+		});	
+	} else {
+		minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
+		complete();
+	}
 };
 
 var sendOrders = function(data, to, client) {
@@ -40,7 +80,7 @@ var sendOrders = function(data, to, client) {
 			prio = prio.irc.red.bgblack();
 			break;
 		case 'ALTA':
-			prio = ' '.irc.bgblack() + prio.irc.bgred();
+			prio = ' '.irc.bgblack() + prio.irc.bgred() + ' '.irc.bgblack();
 			break;
 		case 'MÉDIA':
 			prio = prio.irc.bgolive();

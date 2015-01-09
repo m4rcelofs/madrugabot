@@ -16,6 +16,8 @@ module.exports = function(url, callback) {
 	request.post(options, function(error, response, body) {
 		if (!error && response.statusCode === 200 && !body.error) {
 			callback(body);
+		} else {
+			callback();
 		}
 	});
-}
+};

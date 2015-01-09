@@ -1,6 +1,6 @@
 {
   "name": "madrugabot",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": true,
   "description": "A simple IRC bot for eRepublik",
   "readmeFilename": "README.md",
@@ -9,6 +9,8 @@
 	  "irc": "0.3.x",
 	  "irc-colors": "1.x.x",
 	  "request": "2.51.x",
-	  "moment": "2.8.x"
+	  "moment": "2.8.x",
+	  "forallasync": "1.x.x",
+	  "node-cache": "1.x.x"
   }
 }
