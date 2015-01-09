@@ -1,5 +1,5 @@
 var request = require('request');
-var forAllAsync = require('forAllAsync').forAllAsync;
+var forAllAsync = require('forallasync').forAllAsync;
 var NodeCache = require('node-cache');
 var minify = require.main.require('./minify-url');
 var debug = process.env.MADRUGA_DEBUG || false;

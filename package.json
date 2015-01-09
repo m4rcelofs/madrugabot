@@ -10,7 +10,7 @@
 	  "irc-colors": "1.x.x",
 	  "request": "2.51.x",
 	  "moment": "2.8.x",
-	  "forAllAsync": "1.x.x",
+	  "forallasync": "1.x.x",
 	  "node-cache": "1.x.x"
   }
 }
