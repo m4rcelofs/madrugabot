@@ -1,0 +1,14 @@
+{
+    "rules": {
+        ".read": true,
+        ".write": false,
+        "users": {
+          "$user":{
+            ".write": "auth !== null && auth.uid == 'madruga'",
+            "id": {
+              ".validate": "newData.isNumber()"
+            }
+          }
+        }
+    }
+}

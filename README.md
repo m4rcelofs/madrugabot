@@ -17,6 +17,8 @@
 
 * **MADRUGA_GOOGLE_API_KEY**: Google's [URL Shortener API](https://developers.google.com/url-shortener/v1/getting_started) key (optional, default null)
 
+* **MADRUGA_FIREBASE_PASS**: Secret key from [FirebaseIO](https://firebase.com)
+
 
 `docker run -d --name madruga --net=host marcelofs/madrugabot` 
 

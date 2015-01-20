@@ -1,12 +1,14 @@
 {
   "name": "madrugabot",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "private": true,
   "description": "A simple IRC bot for eRepublik",
   "readmeFilename": "README.md",
   "author": "Marcelo <me@marcelofs.com>",
   "dependencies": {
     "cheerio": "0.18.x",
+    "firebase": "2.1.x",
+    "firebase-token-generator": "2.x.x",
     "forallasync": "1.x.x",
     "irc": "0.3.x",
     "irc-colors": "1.x.x",
