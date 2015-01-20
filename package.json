@@ -6,11 +6,18 @@
   "readmeFilename": "README.md",
   "author": "Marcelo <me@marcelofs.com>",
   "dependencies": {
-	  "irc": "0.3.x",
-	  "irc-colors": "1.x.x",
-	  "request": "2.51.x",
-	  "moment": "2.8.x",
-	  "forallasync": "1.x.x",
-	  "node-cache": "1.x.x"
+    "cheerio": "0.18.x",
+    "forallasync": "1.x.x",
+    "irc": "0.3.x",
+    "irc-colors": "1.x.x",
+    "moment": "2.8.x",
+    "moment-timezone": "0.3.x",
+    "node-cache": "1.x.x",
+    "request": "2.51.x"
+  },
+  "devDependencies": {
+	"chai": "*",
+    "nock": "*",
+    "sinon": "*"
   }
 }
