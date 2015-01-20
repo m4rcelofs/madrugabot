@@ -68,7 +68,7 @@ client.addListener('pm', function(from, message) {
 		var param = parsed[2];
 		try {
 			var cmd = require('./pvt/' + command);
-			var answer = cmd(from, param, client);
+			var answer = cmd(from, param ? param.trim() : param, client);
 			if(answer) {
 				client.say(from, answer);
 			}
