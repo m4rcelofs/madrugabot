@@ -67,7 +67,7 @@ var set = function(nick, id, callback) {
 };
 
 var run = function(from, to, param, client) {
-	if(!param) { return; }
+	param = param || from;
 	get(param, function(id){
 		if(id) {
 			client.say(to, 'O nick ' + param + ' registrou a ID ' + id);
