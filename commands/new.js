@@ -40,14 +40,12 @@ module.exports = function(from, to, param, client) {
 				newUsers = titleRegex.exec(newUsers)[1] +
 							' novos jogadores se registraram dia ' +
 							date + ' no ' + country;
-				if('Brazil' === country) {
-					var flag = '['.irc.green.bggreen() + 
-								'<'.irc.yellow.bggreen() + 
-								'o'.irc.blue.bggreen() + 
-								'>'.irc.yellow.bggreen() + 
-								']'.irc.green.bggreen();
-					newUsers += ' ' + flag + ' http://jackson-bot.appspot.com ' + flag;
-				}
+				var flag = '['.irc.green.bggreen() + 
+							'<'.irc.yellow.bggreen() + 
+							'o'.irc.blue.bggreen() + 
+							'>'.irc.yellow.bggreen() + 
+							']'.irc.green.bggreen();
+				newUsers += ' ' + flag + ' http://jackson-bot.appspot.com '.irc.yellow.bggreen() + flag;
 			} else {
 				newUsers = 'Sem dados para o dia ' + date + ' no ' + country;
 			}
