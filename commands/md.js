@@ -56,21 +56,22 @@ var minifyEach = function(complete, item, i) {
 				if(debug) {
 					console.log('minified ' + item + ' to ' + body.id);
 				}
-				cache.set(item, body.id, 43200); //12h
+				var id = item.substring(item.lastIndexOf('/') + 1);
+				cache.set(item, body.id + ' (.bat ' + id + ' -COid)', 43200); //12h
 			} else {
 				if(debug) {
 					console.log('minification for ' + item + ' failed');
 				}
 				cache.set(item, item, 60); //1min
 			}
-			var id = item.substring(item.lastIndexOf('/') + 1);
-			minifiedBody = minifiedBody.replace(item, cache.get(item)[item] + ' (.bat ' + id + ' -COid)');
+			minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
 			complete();
 		});	
 	} else {
 		if(debug) {
 			console.log('minification for ' + item + ' hit the cache');
 		}
+		var id = item.substring(item.lastIndexOf('/') + 1);
 		minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
 		complete();
 	}
