@@ -1,8 +1,10 @@
 {
     "rules": {
-        ".read": true,
+        ".read": false,
         ".write": false,
         "users": {
+          ".read": true,
+          // $user = irc nick
           "$user":{
             ".write": "auth !== null && auth.uid == 'madruga'",
             "id": {
