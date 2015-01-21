@@ -32,4 +32,14 @@ Send your pull request with a custom command:
 		return 'synchronous message to be sent to channel';
 	};
 
+or
+
+    [./commands/{commandName}.js]
+    var run = function (from, to, param, client) {};
+    var otherFct = function() {};
+    module.exports = {
+      run: run,
+      exportedFct: otherFct
+    };
+
 Check `/commands` for examples.

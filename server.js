@@ -68,7 +68,7 @@ client.addListener('pm', function(from, message) {
 		var param = parsed[2];
 		try {
 			var cmd = require('./pvt/' + command);
-			var answer = cmd(from, param ? param.trim() : param, client);
+			var answer = cmd(from, param ? param.trim() : '', client);
 			if(answer) {
 				client.say(from, answer);
 			}
@@ -91,7 +91,10 @@ client.addListener('message#', function (from, to, message) {
 				console.log('received .'+command);
 			}
 			var cmd = require('./commands/' + command);
-			var answer = cmd(from, to, param, client);
+			if((typeof cmd !== 'function') && cmd.run) {
+				cmd = cmd.run;	
+			}
+			var answer = cmd(from, to, param ? param.trim() : '', client);
 			if(answer) {
 				client.say(to, answer);
 			}
