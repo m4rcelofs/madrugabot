@@ -49,7 +49,7 @@ var minifyAll = function(body, to, client) {
 
 var cache = new NodeCache();
 var minifyEach = function(complete, item, i) {
-	//cache.get('key') returns { "key": { my: "Special", variable: 42 } }
+	//cache.get('key') returns { "key": value }
 	if(!cache.get(item)[item]) {
 		minify(item, function(body){
 			if(body) {
@@ -63,7 +63,8 @@ var minifyEach = function(complete, item, i) {
 				}
 				cache.set(item, item, 60); //1min
 			}
-			minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
+			var id = item.substring(item.lastIndexOf('/') + 1);
+			minifiedBody = minifiedBody.replace(item, cache.get(item)[item] + ' (.bat ' + id + ' -COid)');
 			complete();
 		});	
 	} else {
