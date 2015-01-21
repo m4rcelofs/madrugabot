@@ -19,6 +19,8 @@
 
 * **MADRUGA_FIREBASE_PASS**: Secret key from [FirebaseIO](https://firebase.com)
 
+* **MADRUGA_IMPORTIO_API**: Complete [import.io](https://import.io) API url, with key
+
 
 `docker run -d --name madruga --net=host marcelofs/madrugabot` 
 
