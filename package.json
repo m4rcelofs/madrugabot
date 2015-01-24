@@ -1,6 +1,6 @@
 {
   "name": "madrugabot",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "private": true,
   "description": "A simple IRC bot for eRepublik",
   "readmeFilename": "README.md",

@@ -10,7 +10,6 @@ for(var env in process.env) {
 	}
 }
 
-var debug = process.env.MADRUGA_DEBUG || false;
 var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
 							process.env.MADRUGA_USER || 'Madruga', 
 	{
@@ -19,7 +18,7 @@ var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
     	port: process.env.MADRUGA_PORT || 6667,
     	autoConnect: false, 
     	showErrors: true,
-    	debug: debug,
+    	debug: process.env.MADRUGA_DEBUG || false,
     	userName: 'madruga',
     	realName: 'madruga IRC bot',
     	floodProtection: true,
@@ -27,87 +26,15 @@ var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
 	}
 );
 
-client.addListener('registered', function(message) {
-    if(process.env.MADRUGA_PASS) {
-    	client.say('nickserv', 'IDENTIFY ' + process.env.MADRUGA_PASS);
-    }
-});
-
-client.addListener('notice', function (nick, to, text, message) {
-	if(!process.env.MADRUGA_DEBUG){ //debug already prints those
-		console.warn(text);
+console.log('Loading addons...');
+var addons = require("path").join(__dirname, "addons");
+require("fs").readdirSync(addons).forEach(function(file) {
+	var addon = require("./addons/" + file);
+	if ((typeof addon !== 'function') && addon.run) {
+		addon = addon.run;
 	}
-});
-
-var disconnect = function() {
-	console.log('It seems like we lost the connection...');
-	throw new Error('Server timeout');
-};
-
-var timeout = null;
-var resetTimeout = function() {
-	if(timeout) {
-		clearTimeout(timeout);
-	}
-	timeout = setTimeout(disconnect, 300000); //5min
-};
-client.addListener('ping', resetTimeout);
-client.addListener('notice', resetTimeout);
-client.addListener('message', resetTimeout);
-resetTimeout();
-
-client.addListener('error', function(message) {
-    console.error('error: ', JSON.stringify(message));
-});
-
-client.addListener('pm', function(from, message) {
-	if(message && /^\.[a-z]+/.test(message)) {
-		var parsed = /^\.([a-z]+)\s?(.*)/.exec(message);
-		if(!parsed) { return null; }
-		var command = parsed[1];
-		var param = parsed[2];
-		try {
-			var cmd = require('./pvt/' + command);
-			var answer = cmd(from, param ? param.trim() : '', client);
-			if(answer) {
-				client.say(from, answer);
-			}
-		} catch(e){
-			client.say(from, "?");
-		}
-	} else {
-		client.say(from, "I'm a bot! Digite '.join #canal' ou '.leave #canal'.");
-	}
-});
-
-client.addListener('message#', function (from, to, message) {
-	if(message && /^\.[a-z]+/.test(message)) {
-		var parsed = /^\.([a-z]+)\s?(.*)/.exec(message);
-		if(!parsed) { return null; }
-		var command = parsed[1];
-		var param = parsed[2];
-		try {
-			if(debug){
-				console.log('received .'+command);
-			}
-			var cmd = require('./commands/' + command);
-			if((typeof cmd !== 'function') && cmd.run) {
-				cmd = cmd.run;	
-			}
-			var answer = cmd(from, to, param ? param.trim() : '', client);
-			if(answer) {
-				client.say(to, answer);
-			}
-			if(debug){
-				console.log('executed .'+command);
-			}
-		} catch(e){
-			if(debug){
-				console.log(command + '.js not found?');
-				console.log(e);
-			}
-		}
-	}
+	addon(client);
+	console.log('Addon loaded: ' + file);
 });
 
 client.connect(function(){

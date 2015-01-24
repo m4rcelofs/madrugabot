@@ -26,6 +26,8 @@
 
 ## How to contribute?
 
+#### Commands:
+
 Send your pull request with a custom command:
 
 	[./commands/{commandName}.js]
@@ -45,3 +47,24 @@ or
     };
 
 Check `/commands` for examples.
+
+#### Addons:
+
+Send your pull request with an addon to the core:
+
+	[./addons/{addonName}.js]
+	module.exports = function (client) {
+		//client.addListener(...)
+	};
+
+or
+
+    [./commands/{commandName}.js]
+    var run = function (client) {};
+    var otherFct = function() {};
+    module.exports = {
+      run: run,
+      exportedFct: otherFct
+    };
+
+Check `/addons` for examples.
