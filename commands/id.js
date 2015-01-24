@@ -7,12 +7,12 @@ var db = new Firebase('https://madruga.firebaseio.com/users');
 var cache = new NodeCache();
 var get = function(nick, callback) {
 	//cache.get('key') returns { "key": value }
-	var key = 'ID.' + nick;
+	var key = 'ID.' + nick.toLowerCase();
 	var cached = cache.get(key)[key]; 
 	if(cached) {
 		callback(cached);	
 	} else {
-		db.child(nick + '/id').once("value", 
+		db.child(nick.toLowerCase() + '/id').once("value", 
 		   function(data) {
 		 	 cache.set(key, data.val());
 		 	 callback(data.val());
@@ -52,13 +52,14 @@ var set = function(nick, idObj, callback) {
 		if(authError) {
 			callback(authError);
 		} else {
-			db.child(nick).update(idObj, function(error) {
+			idObj.original = nick;
+			db.child(nick.toLowerCase()).update(idObj, function(error) {
 		    	if(error) {
 		    		console.log(error);
 		    		callback(error);
 		    		return;
 		    	} 
-		    	cache.set('ID.' + nick, idObj.id);
+		    	cache.set('ID.' + nick.toLowerCase(), idObj.id);
 		    	callback();
 		    });			
 		}
