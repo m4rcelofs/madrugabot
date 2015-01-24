@@ -46,20 +46,18 @@ var checkAuth = function(callback) {
 	}
 };
 
-var set = function(nick, id, callback) {
+var set = function(nick, idObj, callback) {
 	checkAuth(function(authError) {
 		if(authError) {
 			callback(authError);
 		} else {
-			db.child(nick).update({
-		    	id : id
-		    }, function(error) {
+			db.child(nick).update(idObj, function(error) {
 		    	if(error) {
 		    		console.log(error);
 		    		callback(error);
 		    		return;
 		    	} 
-		    	cache.set('ID.' + nick, id);
+		    	cache.set('ID.' + nick, idObj.id);
 		    	callback();
 		    });			
 		}
