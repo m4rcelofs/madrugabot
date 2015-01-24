@@ -1,8 +1,8 @@
-var Firebase = require("firebase");
-var FirebaseTokenGenerator = require("firebase-token-generator");
+var Firebase = require('firebase');
+var FirebaseTokenGenerator = require('firebase-token-generator');
 var NodeCache = require('node-cache');
 
-var db = new Firebase("https://madruga.firebaseio.com/users");
+var db = new Firebase('https://madruga.firebaseio.com/users');
 
 var cache = new NodeCache();
 var get = function(nick, callback) {
@@ -47,6 +47,7 @@ var checkAuth = function(callback) {
 };
 
 var set = function(nick, idObj, callback) {
+	if(!callback) { callback = function(){}; };
 	checkAuth(function(authError) {
 		if(authError) {
 			callback(authError);
