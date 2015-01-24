@@ -26,11 +26,10 @@ var search = function(to, id, client) {
 };
 
 module.exports = function (from, to, param, client) {
-	if(!param) { return null; }
 	if(/^\d+$/.test(param.trim())) {
 		search(to, param, client);
 	} else {
-		getId(param, function(id){
+		getId(param || from, function(id){
 			if(id) {
 				search(to, id, client);	
 			}
