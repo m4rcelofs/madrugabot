@@ -4,15 +4,19 @@ var NodeCache = require('node-cache');
 
 var db = new Firebase('https://madruga.firebaseio.com/users');
 
+var tokenize = function(nick) {
+	return nick.toLowerCase().replace(/[\.#$\[\]]/, '');
+};
+
 var cache = new NodeCache();
 var get = function(nick, callback) {
 	//cache.get('key') returns { "key": value }
-	var key = 'ID.' + nick.toLowerCase();
+	var key = 'ID.' + tokenize(nick);
 	var cached = cache.get(key)[key]; 
 	if(cached) {
 		callback(cached);	
 	} else {
-		db.child(nick.toLowerCase() + '/id').once("value", 
+		db.child(tokenize(nick) + '/id').once("value", 
 		   function(data) {
 		 	 cache.set(key, data.val());
 		 	 callback(data.val());
@@ -47,19 +51,19 @@ var checkAuth = function(callback) {
 };
 
 var set = function(nick, idObj, callback) {
-	if(!callback) { callback = function(){}; };
+	if(!callback) { callback = function(){}; }
 	checkAuth(function(authError) {
 		if(authError) {
 			callback(authError);
 		} else {
 			idObj.original = nick;
-			db.child(nick.toLowerCase()).update(idObj, function(error) {
+			db.child(tokenize(nick)).update(idObj, function(error) {
 		    	if(error) {
 		    		console.log(error);
 		    		callback(error);
 		    		return;
 		    	} 
-		    	cache.set('ID.' + nick.toLowerCase(), idObj.id);
+		    	cache.set('ID.' + tokenize(nick), idObj.id);
 		    	callback();
 		    });			
 		}
