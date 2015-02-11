@@ -52,7 +52,7 @@ var minifyEach = function(complete, item, i) {
 	//cache.get('key') returns { "key": value }
 	if(!cache.get(item)[item]) {
 		minify(item, function(body){
-			if(body) {
+			if(body && body.id) {
 				if(debug) {
 					console.log('minified ' + item + ' to ' + body.id);
 				}
