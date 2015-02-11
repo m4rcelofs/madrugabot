@@ -16,6 +16,7 @@ var client = new irc.Client(process.env.MADRUGA_HOST || 'irc.rizon.net',
     	channels: process.env.MADRUGA_CHANNELS ? 
     				process.env.MADRUGA_CHANNELS.split(' ') : '',
     	port: process.env.MADRUGA_PORT || 6667,
+    	localPort: process.env.MADRUGA_LOCALPORT || 50555,
     	autoRejoin: true,
     	autoConnect: false, 
     	showErrors: true,

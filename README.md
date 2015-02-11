@@ -3,19 +3,21 @@
 
 ## Usage
 
-* **MADRUGA_HOST**: the IRC host (default 'irc.rizon.net')
+* **MADRUGA_HOST**: the IRC host (default `'irc.rizon.net'`)
 
-* **MADRUGA_PORT**: the IRC host port (default 6667)
+* **MADRUGA_PORT**: the IRC host port (default `6667`)
 
-* **MADRUGA_USER**: the bot's username (default 'Madruga')
+* **MADRUGA_LOCALPORT**: the localPort to use when connecting (default `50555`)
+
+* **MADRUGA_USER**: the bot's username (default `'Madruga'`)
 
 * **MADRUGA_PASS**: the bot's password (optional, nickserv registered nick only)
 
 * **MADRUGA_CHANNELS**: a space separated list of channels to join when connecting (optional, '#chan1 #chan2 #chan3')
 
-* **MADRUGA_DEBUG**: debug mode (default false)
+* **MADRUGA_DEBUG**: debug mode (default `false`)
 
-* **MADRUGA_GOOGLE_API_KEY**: Google's [URL Shortener API](https://developers.google.com/url-shortener/v1/getting_started) key (optional, default null)
+* **MADRUGA_GOOGLE_API_KEY**: Google's [URL Shortener API](https://developers.google.com/url-shortener/v1/getting_started) key (optional, default `null`)
 
 * **MADRUGA_FIREBASE_PASS**: Secret key from [FirebaseIO](https://firebase.com)
 
