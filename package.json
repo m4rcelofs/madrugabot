@@ -20,7 +20,11 @@
   },
   "devDependencies": {
 	"chai": "*",
+	"mocha": "*",
     "nock": "*",
     "sinon": "*"
+  },
+  "scripts": {
+	  "test": "mocha"
   }
 }
