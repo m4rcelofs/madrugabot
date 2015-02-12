@@ -5,4 +5,6 @@
 #
 
 
-FROM dockerfile/nodejs-runtime
+FROM node:0.12-onbuild
+
+EXPOSE 50555
