@@ -8,7 +8,7 @@ module.exports = function(client) {
 			var param = parsed[2];
 			try {
 				if (debug) {
-					console.log('received .' + command);
+					console.log('received .' + command + ' ' + param);
 				}
 				var cmd = require('../commands/' + command);
 				if ((typeof cmd !== 'function') && cmd.run) {
