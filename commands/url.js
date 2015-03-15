@@ -3,7 +3,7 @@ var request = require('request');
 var run = function(from, to, param, client) {
 	if(param && param.trim()) {
 		minify(param, function(body){
-			if(body && body.longUrl && body.id) {
+			if(body && body.longUrl && body.id && body.id.irc) {
 				client.say(to, 'Link encurtado de ' + body.longUrl + ' para ' + body.id.irc.bold());			
 			}
 		});		
