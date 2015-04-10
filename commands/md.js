@@ -60,7 +60,7 @@ var minifyEach = function(complete, item, i) {
 				cache.set(item, body.id + ' (.bat ' + id + ' -COid)', 43200); //12h
 			} else {
 				if(debug) {
-					console.log('minification for ' + item + ' failed');
+					console.log('minification for ' + item + ' failed: ' + JSON.stringify(body));
 				}
 				cache.set(item, item, 60); //1min
 			}
