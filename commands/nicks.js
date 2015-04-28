@@ -11,7 +11,13 @@ var search = function(to, id, client) {
 		if(error) {
 			client.say(to, 'O servidor de nicks está offline ): [http ' + response.statusCode + ']');
 		} else {
-			var data = JSON.parse(body);
+			var data;
+			try {
+				data = JSON.parse(body);	
+			} catch(e){
+				client.say(to, 'O servidor de nicks retornou algo errado [' + e + ']');
+				return;
+			}
 			if(data && data.length > 0) {
 				var namesHistory = 'Achei os seguintes nicks para o jogador ' + id + ': ';
 				for(var i=0; i < data.length; i++) {
