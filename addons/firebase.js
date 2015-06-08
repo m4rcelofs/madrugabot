@@ -16,6 +16,7 @@ var doAuth = function(callback) {
 		}
 	});	
 };
+doAuth();
 
 var checkAuth = function(callback) {
 	var auth = db.getAuth();
@@ -45,6 +46,7 @@ var update = function(path, obj, callback) {
 };
 
 module.exports = {
-	update : update,
+	db: db,
+	update: update,
 	run: function(){}
 };
