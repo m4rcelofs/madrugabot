@@ -1,4 +1,6 @@
 var debug = process.env.MADRUGA_DEBUG || false;
+var quietList = process.env.MADRUGA_QUIET_LIST || '';
+
 module.exports = function(client) {
 	client.addListener('message#', function(from, to, message) {
 		if (message && /^\.[a-z]+/.test(message)) {
@@ -15,12 +17,11 @@ module.exports = function(client) {
 					cmd = cmd.run;
 				}
 				var answer = cmd(from, to, param ? param.trim() : '', client);
-				if (answer) {
+				if (answer && quietList.indexOf(to) === -1) {
 					client.say(to, answer);
+					if (debug) { console.log('executed .' + command); }
 				}
-				if (debug) {
-					console.log('executed .' + command);
-				}
+				
 			} catch (e) {
 				if (debug) {
 					console.log(e);
