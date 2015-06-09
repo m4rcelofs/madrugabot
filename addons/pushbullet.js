@@ -18,6 +18,8 @@ module.exports = function() {
 	
 	function notify(snapshot, destination) {
 		var battle = snapshot.val();
+		if (battle.posted === true) { return; }
+		
 		var text = '';
 		if(battle.attacker && battle.defender) {
 			text += battle.attacker + ' vs ' + battle.defender + ' in ';
@@ -45,8 +47,13 @@ module.exports = function() {
 		};
 		
 		request(options, function(error, response, body) {
-			console.log('posted epic ' + snapshot.key() + ' to pushbullet');
-			console.log(body);
+			console.log('posted ' + snapshot.key() + ' to @' + destination);
+			if(error) { 
+				console.log(error); 
+				console.log(body); 
+			} else {
+				snapshot.ref().update({posted: true});
+			}
 		});
 	}
 };
