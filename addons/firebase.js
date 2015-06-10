@@ -10,6 +10,8 @@ var doAuth = function(callback) {
 	db.authWithCustomToken(token, function(error, authData){
 		if(error) {
 			console.log('Erro na autenticação com o FirebaseIO', error);
+		} else {
+			console.log('Autenticado no FirebaseIO');
 		}
 		if(callback) {
 			callback(error);

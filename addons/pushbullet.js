@@ -45,15 +45,15 @@ module.exports = function() {
 					'body': text
 				}
 		};
-		
+
+		console.log('posting ' + snapshot.key() + ' to @' + destination);
 		request(options, function(error, response, body) {
-			console.log('posted ' + snapshot.key() + ' to @' + destination);
 			if(error) { 
 				console.log(error); 
-				console.log(body); 
 			} else {
-				snapshot.ref().update({posted: true});
+				snapshot.ref().child('posted').set(true);
 			}
+			console.log(body);
 		});
 	}
 };

@@ -6,13 +6,14 @@ module.exports = function(client) {
 		try {
 			if('e-bot' === from) {
 				message = strip(message);
-				var epic = /Epic Battle (D[1-4])!  :: \[Round:\d+\] \[(\d\dh:\d\dm)\] \[([a-zA-Z\s]+)\] http:\/\/www.erepublik.com\/en([\w\/-]+)/;
+				var epic = /Epic Battle (D[1-4])!  :: \[Round:(\d+)\] \[(\d\dh:\d\dm)\] \[([a-zA-Z\s]+)\] http:\/\/www.erepublik.com\/en([\w\/-]+)/;
 				var parsed = epic.exec(message);
 				if(parsed) {
 					var battle = {
-						time: parsed[2],
-						region: parsed[3],
-						href: parsed[4],
+						round: parsed[2],
+						time: parsed[3],
+						region: parsed[4],
+						href: parsed[5],
 						status: 'Epic Battle',
 						reported: {
 							'.sv': 'timestamp'
