@@ -10,7 +10,7 @@ module.exports = function(client) {
 				var parsed = epic.exec(message);
 				if(parsed) {
 					var battle = {
-						round: parsed[2],
+						round: parseInt(parsed[2], 10),
 						time: parsed[3],
 						region: parsed[4],
 						href: parsed[5],
