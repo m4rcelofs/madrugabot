@@ -1,4 +1,4 @@
-var update = require('./firebase').update;
+var fb = require('./firebase');
 var strip = require('irc-colors').stripColorsAndStyle;
 
 module.exports = function(client) {
@@ -21,7 +21,7 @@ module.exports = function(client) {
 					};
 					var div = parsed[1]; 
 					var id = battle.href.substring(battle.href.lastIndexOf('/') + 1);
-					update('/epics/' + div + '/' + id, battle);
+					fb.update('/epics/' + div + '/' + id, battle);
 					if(process.env.MADRUGA_DEBUG) {
 						console.log('Got info from e-bot: ' + JSON.stringify(battle));
 					}

@@ -28,6 +28,9 @@ var checkAuth = function(callback) {
 		doAuth(callback);
 	}
 };
+db.onAuth(function(data){
+	checkAuth();
+});
 
 var update = function(path, obj, callback) {
 	if(!callback) { callback = function(){}; }
