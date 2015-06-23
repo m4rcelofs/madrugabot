@@ -6,9 +6,11 @@ var search = function(to, id, client, nick){
 	if(nick) {
 		response += ' ' + nick;
 	}
-	response += ' (' + id + ') ' + sep +
-				' eGov Link http://www.egov4you.info/citizen/history/' + 
-				id + ' ' + sep;
+	response += ' (' + id + ') ' + sep + 
+				' http://www.erepublik.com/en/citizen/profile/' + id +
+				' ' + sep + 
+				' http://www.egov4you.info/citizen/history/' + id + 
+				' ' + sep;
 	client.say(to, response);
 };
 
