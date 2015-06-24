@@ -23,7 +23,9 @@ doAuth();
 var checkAuth = function(callback) {
 	var auth = db.getAuth();
 	if(auth) {
-		callback();
+		if(callback) {
+			callback();	
+		}
 	} else {
 		doAuth(callback);
 	}
