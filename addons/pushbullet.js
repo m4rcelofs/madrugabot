@@ -27,7 +27,7 @@ module.exports = function() {
 		text += battle.region + '\n';
 		text += battle.time + '\n';
 		
-		var up = moment(battle.reported);
+		var up = moment(battle.reported).locale('en');
 		text += 'Reported ' + up.fromNow() + '\n';
 		
 		var options = {
