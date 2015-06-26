@@ -67,7 +67,7 @@ module.exports = function(client) {
 			text += battle.attacker + ' vs ' + battle.defender + ' in ';
 		}
 		text += battle.region + sep;
-		text += '' + battle.time + sep;
+		text += battle.time.irc.black() + sep;
 		text += 'Round ' + battle.round + sep;
 		text+= 'http://www.erepublik.com/en' + battle.href + sep;
 		
