@@ -6,12 +6,15 @@ var db = new Firebase('https://madruga.firebaseio.com');
 var doAuth = function(callback) {
 	var pass = process.env.MADRUGA_FIREBASE_PASS;
 	if(!pass) { console.log('MADRUGA_FIREBASE_PASS not set'); }
-	var token= new FirebaseTokenGenerator(pass).createToken({uid: 'madruga'});
+	var token= new FirebaseTokenGenerator(pass).createToken(
+			{uid: 'madruga'}, 
+			{expires: Date.now() / 1000 + 31536000} // +365d
+	);
 	db.authWithCustomToken(token, function(error, authData){
 		if(error) {
 			console.log('Erro na autenticação com o FirebaseIO', error);
 		} else {
-			console.log('Autenticado no FirebaseIO');
+			console.log('Autenticado no FirebaseIO: ', authData);
 		}
 		if(callback) {
 			callback(error);
@@ -31,6 +34,7 @@ var checkAuth = function(callback) {
 	}
 };
 db.onAuth(function(data){
+	//unauth runs with null
 	checkAuth();
 });
 
