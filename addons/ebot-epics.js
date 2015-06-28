@@ -15,6 +15,7 @@ module.exports = function(client) {
 						region: parsed[4],
 						href: parsed[5],
 						status: 'Epic Battle',
+						source: 'e-bot',
 						reported: {
 							'.sv': 'timestamp'
 						}
