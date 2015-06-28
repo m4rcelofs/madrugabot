@@ -34,6 +34,7 @@ module.exports = function(client) {
 		text += battle.region + '\n';
 		text += 'Round ' + battle.round + '\n';
 		text += battle.time + '\n';
+		text += 'Source: ' + (battle.source || 'unknown') + '\n';
 		
 		var options = {
 				url: 'https://api.pushbullet.com/v2/pushes',
@@ -69,7 +70,8 @@ module.exports = function(client) {
 		text += battle.region + sep;
 		text += battle.time.irc.black() + sep;
 		text += 'Round ' + battle.round + sep;
-		text+= 'http://www.erepublik.com/en' + battle.href + sep;
+		text += 'http://www.erepublik.com/en' + battle.href + sep;
+		text += 'Source: ' + (battle.source || 'unknown') + sep;
 		
 		console.log('shouting ' + battle.href);
 		client.say('#madruga', text);
