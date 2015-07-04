@@ -18,12 +18,12 @@ module.exports = function(client) {
 	
 	function notify(snapshot, div, destination) {
 		var battle = snapshot.val();
-		if (battle.posted === true) { return; }
+		if (battle.round <= battle.posted) { return; }
 		
 		notifyWeb(battle, destination);
 		notifyIrc(battle, div);
 		
-		snapshot.ref().child('posted').set(true);
+		snapshot.ref().child('posted').set(battle.round);
 	}
 	
 	function notifyWeb(battle, destination) {
