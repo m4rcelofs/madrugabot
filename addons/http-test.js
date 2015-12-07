@@ -5,7 +5,13 @@ var PORT=8080;
 
 //We need a function which handles requests and send response
 function handleRequest(request, response){
-    response.end('It Works!! Path Hit: ' + request.url);
+    response.end(
+    	'<html>											 \
+    		<script src="								 \
+    		https://marcelofs.com/static/new_relic.js">	 \
+    		</script> 									 \
+    		It Works!! Path Hit: ' + request.url + '	 \
+    	 </html>');
 }
 
 module.exports = {
