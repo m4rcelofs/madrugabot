@@ -6,7 +6,7 @@ module.exports = function(client) {
 			var command = parsed[1];
 			var param = parsed[2];
 			try {
-				var cmd = require('../pvt/' + command);
+				var cmd = require('../pvt/' + command.toLowerCase());
 				var answer = cmd(from, param ? param.trim() : '', client);
 				if (answer) {
 					client.say(from, answer);

@@ -12,7 +12,7 @@ module.exports = function(client) {
 				if (debug) {
 					console.log('received .' + command + ' ' + param);
 				}
-				var cmd = require('../commands/' + command);
+				var cmd = require('../commands/' + command.toLowerCase());
 				if ((typeof cmd !== 'function') && cmd.irc) {
 					cmd = cmd.irc;
 				}

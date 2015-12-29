@@ -24,7 +24,7 @@ function handleMessage(message) {
 			if (debug) {
 				console.log('received /' + command + ' ' + param);
 			}
-			var cmd = require('../commands/' + command);
+			var cmd = require('../commands/' + command.toLowerCase());
 			if ((typeof cmd !== 'function') && cmd.telegram) {
 				cmd = cmd.telegram;
 			}
