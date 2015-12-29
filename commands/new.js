@@ -2,8 +2,7 @@ var cheerio = require('cheerio');
 var moment = require('moment-timezone');
 var request = require('request');
 
-module.exports = function(from, to, param, client) {
-
+function getNew(param, callback) {
 	var erTimeZone = 'America/Los_Angeles';
 	
 	moment.locale('pt-br');
@@ -28,7 +27,11 @@ module.exports = function(from, to, param, client) {
 			go : 'SUBMIT',
 			date : date
 		}
-	}, function(error, response, body) {
+	}, callback);
+}
+
+function irc(from, to, param, client) {
+	getNew(param, function(error, response, body) {
 		if (error) {
 			client.say(to,
 					'O servidor de novos jogadores está offline ): [http ' + response.statusCode + ']');
@@ -38,8 +41,7 @@ module.exports = function(from, to, param, client) {
 			var titleRegex = /^(\d+).*$/;
 			if(titleRegex.test(newUsers)){
 				newUsers = titleRegex.exec(newUsers)[1] +
-							' novos jogadores se registraram dia ' +
-							date + ' no ' + country;
+							' novos jogadores se registraram neste dia';
 				var flag = '['.irc.green.bggreen() + 
 							'<'.irc.yellow.bggreen() + 
 							'o'.irc.blue.bggreen() + 
@@ -47,10 +49,42 @@ module.exports = function(from, to, param, client) {
 							']'.irc.green.bggreen();
 				newUsers += ' ' + flag + ' http://jackson-bot.appspot.com '.irc.yellow.bggreen() + flag;
 			} else {
-				newUsers = 'Sem dados para o dia ' + date + ' no ' + country;
+				newUsers = 'Sem dados para o dia';
 			}
 			client.say(to, newUsers);
 		}
-	});
-	return 'Procurando novos jogadores...';
+	});	
+}
+
+function telegram(from, to, param, bot) {
+	getNew(param, function(error, response, body) {
+		if (error) {
+			bot.sendMessage({
+				chat_id: to.id,
+		        text: 'O servidor de novos jogadores está offline ): [http ' + response.statusCode + ']'
+			});
+		} else {
+			var $ = cheerio.load(body);
+			var newUsers = $('.page-header > h1').text();
+			var titleRegex = /^(\d+).*$/;
+			if(titleRegex.test(newUsers)){
+				newUsers = titleRegex.exec(newUsers)[1] +
+							' novos jogadores se registraram neste dia';
+				var flag = '[<o>]';
+				newUsers += '\n\n ' + flag + ' http://jackson-bot.appspot.com ' + flag;
+			} else {
+				newUsers = 'Sem dados para o dia';
+			}
+			bot.sendMessage({
+				chat_id: to.id,
+		        text: newUsers,
+		        disable_web_page_preview: true
+			});
+		}
+	});	
+}
+
+module.exports = {
+	irc : irc,
+	telegram : telegram
 };

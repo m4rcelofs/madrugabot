@@ -1,6 +1,6 @@
 var setId = require('./id').set;
 
-module.exports = function (from, to, param, client) {
+function irc(from, to, param, client) {
 	if(!param || !/\d+/.test(param)) {
 		client.say(to, from + ', pfv digite ".regid idNoErepublik"');
 		return; 
@@ -22,4 +22,13 @@ module.exports = function (from, to, param, client) {
 	});
     client.say('nickserv', 'STATUS ' + from);
 	return null;
+}
+
+function telegram(from, to, param, bot) {
+	//TODO
+}
+
+module.exports = {
+	irc : irc,
+	telegram : telegram
 };

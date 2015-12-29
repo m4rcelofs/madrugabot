@@ -1,4 +1,4 @@
-module.exports = function(from, to, param, client) {
+function irc(from, to, param, client) {
 	if(!param) { return null; }
 	client.once('names',  function(channel, nicks) {
 		if(to === channel) {
@@ -15,4 +15,13 @@ module.exports = function(from, to, param, client) {
 	});
 	client.send('names', to);
 	return null;
+};
+
+function telegram(from, to, param, bot) {
+	//TODO
+}
+
+module.exports = {
+	irc : irc,
+	telegram : telegram
 };

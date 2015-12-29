@@ -1,83 +1,36 @@
 var request = require('request');
-var forAllAsync = require('forallasync').forAllAsync;
-var NodeCache = require('node-cache');
-var minify = require('./url').minify;
 var debug = process.env.MADRUGA_DEBUG || false;
 
-module.exports = function (from, to, param, client) {
+var url = 'https://docs.google.com/spreadsheet/pub' +
+			'?key=0AtKIBJ-62ILkdGNuYWNfZ2RhalVNaVltbkNTLUpEelE' +
+			'&single=true' +
+			'&gid=0' +
+			'&range=A2%3AI8' +
+			'&output=csv';
+
+function md(from, to, param, client, type) {
 	if(debug) {
 		console.log('.md requesting table');
 	}
 	
-	var url = 'https://docs.google.com/spreadsheet/pub' +
-	'?key=0AtKIBJ-62ILkdGNuYWNfZ2RhalVNaVltbkNTLUpEelE' +
-	'&single=true' +
-	'&gid=0' +
-	'&range=A2%3AI8' +
-	'&output=csv';
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
 			if(debug) {
 				console.log('table received');
 			}
-			minifyAll(body, to, client);
+			switch(type) {
+		  		case 'IRC':
+		  			sendOrdersIrc(body, to, client);
+		  			break;
+		  		case 'TELEGRAM':
+		  			sendOrdersTelegram(body, to, client);
+		  			break;
+			}		
 		}
 	});
-	return 'Buscando ordens...';
-};
+}
 
-var minifiedBody = '';
-var minifyAll = function(body, to, client) {
-	minifiedBody = body;
-	
-	var toMinify = [];
-	var lines = body.split('\n');
-	for(var i=0; i < lines.length - 1; i++) {
-		var cells = lines[i].split(',');
-		if(cells[1]) {
-			toMinify.push(cells[1]);			
-		}
-	}
-	
-	if(debug) {
-		console.log('starting minification of ' + JSON.stringify(toMinify));
-	}
-	forAllAsync(toMinify, minifyEach, toMinify.length).then(function(){
-		sendOrders(minifiedBody, to, client);
-	});
-};
-
-var cache = new NodeCache();
-var minifyEach = function(complete, item, i) {
-	//cache.get('key') returns { "key": value }
-	if(!cache.get(item)[item]) {
-		minify(item, function(body){
-			if(body && body.id) {
-				if(debug) {
-					console.log('minified ' + item + ' to ' + body.id);
-				}
-				var id = item.substring(item.lastIndexOf('/') + 1);
-				cache.set(item, body.id + ' (.bat ' + id + ' -COid)', 43200); //12h
-			} else {
-				if(debug) {
-					console.log('minification for ' + item + ' failed: ' + JSON.stringify(body));
-				}
-				cache.set(item, item, 60); //1min
-			}
-			minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
-			complete();
-		});	
-	} else {
-		if(debug) {
-			console.log('minification for ' + item + ' hit the cache');
-		}
-		var id = item.substring(item.lastIndexOf('/') + 1);
-		minifiedBody = minifiedBody.replace(item, cache.get(item)[item]);
-		complete();
-	}
-};
-
-var sendOrders = function(data, to, client) {
+var sendOrdersIrc = function(data, to, client) {
 	if(debug) {
 		console.log('sending orders');
 	}
@@ -136,5 +89,56 @@ var sendOrders = function(data, to, client) {
 	client.say(to, toSay);
 	if(debug) {
 		console.log('orders sent');
+	}
+};
+
+
+var sendOrdersTelegram = function(data, to, bot) {
+	if(debug) {
+		console.log('sending orders');
+	}
+	var flag = '[<o>]';
+	var toSay = flag + 
+				' Ministério da Defesa - Ordens de Batalha ' + 
+				flag + 
+				'\n\n';
+	var lines = data.split('\n');
+	for(var i=0; i < lines.length - 1; i++) {
+		var cells = lines[i].split(',');
+		var type = (' (' + cells[2] + '): ');
+		var region = (' ' + cells[0] + ' ');
+		var link = (' ' + cells[1] + ' ');
+		var ally = (' ' + cells[4] + ' ');
+		var vs = (' ' + cells[5] + 'x' + cells[6] + ' ');
+		var enemy = (' ' + cells[7] + ' ');
+		var prio = ' ' + cells[3] + ' ';
+		if(cells[0]) {
+			toSay += region + type + '\n' + ally + vs + enemy + '\n' + prio + '\n' + link + '\n\n';	
+		}
+	}
+	var latestUpdate = lines[lines.length - 1].split(',');
+	toSay += flag + (' Último update: ' + 
+						latestUpdate[1] + 
+						' @ ' + 
+						latestUpdate[2] + 
+					' ') + 
+			 flag + '\n';
+	toSay += flag + ' Planilha:  http://goo.gl/zLp8hn ' + flag;
+	bot.sendMessage({
+		chat_id: to.id,
+        text: toSay,
+        disable_web_page_preview: true
+	});
+	if(debug) {
+		console.log('orders sent');
+	}
+};
+
+module.exports = {
+	irc : function(from, to, param, client){
+		md(from, to, param, client, 'IRC');
+	},
+	telegram : function(from, to, param, bot){
+		md(from, to, param, bot, 'TELEGRAM');
 	}
 };

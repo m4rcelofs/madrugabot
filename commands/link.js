@@ -14,7 +14,7 @@ var search = function(to, id, client, nick){
 	client.say(to, response);
 };
 
-module.exports  = function (from, to, param, client) {
+function irc(from, to, param, client) {
 	if(/^\d+$/.test(param.trim())) {
 		search(to, param, client);
 	} else {
@@ -25,4 +25,13 @@ module.exports  = function (from, to, param, client) {
 		});		
 	}
 	return null;
+}
+
+function telegram(from, to, param, bot) {
+	//TODO
+}
+
+module.exports = {
+	irc : irc,
+	telegram : telegram
 };

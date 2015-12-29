@@ -8,4 +8,3 @@
 FROM node:0.12-onbuild
 
 EXPOSE 50555
-EXPOSE 8080

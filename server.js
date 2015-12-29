@@ -1,4 +1,3 @@
-require('newrelic');
 var irc = require('irc');
 var colors = require('irc-colors').global();
 

@@ -1,6 +1,6 @@
 var request = require('request');
 	
-var run = function(from, to, param, client) {
+var irc = function(from, to, param, client) {
 	if(param && param.trim()) {
 		minify(param, function(body){
 			if(body && body.longUrl && body.id && body.id.irc) {
@@ -37,7 +37,12 @@ var minify = function(url, callback) {
 	});
 };
 
+var telegram =  function(from, to, param, bot){
+	//TODO
+};
+
 module.exports = {
-	run: run,
+	irc: irc,
+	telegram: telegram,
 	minify: minify
 };

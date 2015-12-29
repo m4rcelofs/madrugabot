@@ -13,8 +13,8 @@ module.exports = function(client) {
 					console.log('received .' + command + ' ' + param);
 				}
 				var cmd = require('../commands/' + command);
-				if ((typeof cmd !== 'function') && cmd.run) {
-					cmd = cmd.run;
+				if ((typeof cmd !== 'function') && cmd.irc) {
+					cmd = cmd.irc;
 				}
 				var answer = cmd(from, to, param ? param.trim() : '', client);
 				if (answer && quietList.indexOf(to) === -1) {

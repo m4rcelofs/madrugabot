@@ -70,7 +70,7 @@ var set = function(nick, idObj, callback) {
 	});
 };
 
-var run = function(from, to, param, client) {
+var irc = function(from, to, param, client) {
 	param = param || from;
 	get(param, function(id){
 		if(id) {
@@ -81,8 +81,13 @@ var run = function(from, to, param, client) {
 	});
 };
 
+var telegram = function(from, to, param, bot) {
+	//TODO
+};
+
 module.exports = {
-	run : run,
+	irc : irc,
+	telegram : telegram,
 	get : get,
 	set : set
 };
