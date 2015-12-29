@@ -4,14 +4,14 @@ var quietList = process.env.MADRUGA_QUIET_LIST || '';
 var Bot = require('node-telegram-bot');
 var bot;
 
-module.exports = function() {
+function start() {
 	bot = new Bot({
 		token: process.env.MADRUGA_TELEGRAM || 'TOKEN HERE'
 	  })
 	  .enableAnalytics(process.env.MADRUGA_BOTAN_IO)
 	  .on('message', handleMessage)
 	  .start();
-};
+}
 
 function handleMessage(message) {
 	console.log(message);
@@ -24,7 +24,7 @@ function handleMessage(message) {
 			if (debug) {
 				console.log('received /' + command + ' ' + param);
 			}
-			var cmd = require('../commands/' + command.toLowerCase());
+			var cmd = require('./commands/' + command.toLowerCase());
 			if ((typeof cmd !== 'function') && cmd.telegram) {
 				cmd = cmd.telegram;
 			}
@@ -44,3 +44,18 @@ function handleMessage(message) {
 		}
 	}
 }
+
+function sendMessage(destination, text) {
+	console.log('sending message to ', destination);
+	bot.sendMessage({
+		chat_id: destination,
+        text: text,
+        disable_web_page_preview: true
+	});
+}
+
+module.exports = {
+	start: start,
+	bot: bot,
+	sendMessage: sendMessage,
+};

@@ -5,10 +5,10 @@ var moment = require('moment');
 var key = process.env.MADRUGA_PUSHBULLET || '';
 
 module.exports = function(client) {
-	subscribe('epics/D1', 'D1', 'erepublik_d1');
-	subscribe('epics/D2', 'D2', 'erepublik_d2');
-	subscribe('epics/D3', 'D3', 'erepublik_d3');
-	subscribe('epics/D4', 'D4', 'erepublik');
+	subscribe('epics/D1', 'D1', '@epics1');
+	subscribe('epics/D2', 'D2', '@epics2');
+	subscribe('epics/D3', 'D3', '@epics3');
+	subscribe('epics/D4', 'D4', '@epics');
 	
 	function subscribe(path, div, destination) {
 		var limit = Date.now() - 1000 * 60 * 5;
@@ -17,48 +17,28 @@ module.exports = function(client) {
 	}
 	
 	function notify(snapshot, div, destination) {
+		console.log('notifying new epic battle');
 		var battle = snapshot.val();
 		if (battle.round <= battle.posted) { return; }
 		
-		notifyWeb(battle, destination);
+		notifyTelegram(battle, destination);
 		notifyIrc(battle, div);
 		
 		snapshot.ref().child('posted').set(battle.round);
 	}
 	
-	function notifyWeb(battle, destination) {
-		var text = '';
+	function notifyTelegram(battle, destination) {
+		var text = battle.status + ': ' + battle.time + '\n';
 		if(battle.attacker && battle.defender) {
-			text += battle.attacker + ' vs ' + battle.defender + ' in ';
+			text += battle.attacker + ' vs ' + battle.defender + '\n';
 		}
 		text += battle.region + '\n';
 		text += 'Round ' + battle.round + '\n';
-		text += battle.time + '\n';
 		text += 'Source: ' + (battle.source || 'unknown') + '\n';
+		text += 'http://www.erepublik.com/en' + battle.href;
 		
-		var options = {
-				url: 'https://api.pushbullet.com/v2/pushes',
-				method: 'POST',
-				json: true,
-				headers: {
-					'Authorization': 'Bearer ' + key
-				}, 
-				body: {
-					'channel_tag': destination,
-					'type': 'link',
-					'title': battle.status + ': ' + battle.time,
-					'url': 'http://www.erepublik.com/en' + battle.href,
-					'body': text
-				}
-		};
-
-		console.log('posting ' + battle.href + ' to @' + destination);
-		request(options, function(error, response, body) {
-			if(error) { 
-				console.log(error);
-			}
-			console.log(body);
-		});
+		console.log('posting ' + battle.href + ' to ' + destination);
+		require('../telegram').sendMessage(destination, text);
 	}
 	
 	function notifyIrc(battle, div) {

@@ -26,6 +26,8 @@ function md(from, to, param, client, type) {
 		  			sendOrdersTelegram(body, to, client);
 		  			break;
 			}		
+		} else {
+			console.log(response.statusCode, error);
 		}
 	});
 }
