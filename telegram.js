@@ -10,6 +10,9 @@ function start() {
 	  })
 	  .enableAnalytics(process.env.MADRUGA_BOTAN_IO)
 	  .on('message', handleMessage)
+	  .on('error', function (message) {
+		  console.log(message);
+	  })
 	  .start();
 }
 
@@ -33,9 +36,12 @@ function handleMessage(message) {
 				bot.sendMessage({
 					chat_id: message.chat.id,
 			        text: answer,
-			        reply_to_message_id: message.message_id
+			        reply_to_message_id: message.message_id,
+			        disable_web_page_preview: true
+				}, function (err, msg) {
+					if (debug) { console.log('executed /' + command); }
+					if(err) { console.log(err); }
 				});
-				if (debug) { console.log('executed /' + command); }
 			}
 		} catch (e) {
 			if (debug) {
