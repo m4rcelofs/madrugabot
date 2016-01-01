@@ -11,7 +11,8 @@ function start() {
 	  .enableAnalytics(process.env.MADRUGA_BOTAN_IO)
 	  .on('message', handleMessage)
 	  .on('error', function (message) {
-		  console.log(message);
+		  console.error('It seems like we lost the connection...');
+		  throw new Error('Telegram error:', message);
 	  })
 	  .start();
 }
