@@ -2,13 +2,168 @@
     "rules": {
         ".read": false,
         ".write": false,
+        "epics": {
+          ".read": "auth !== null && auth.uid == 'madruga'",
+          "D4": {
+            ".indexOn": ["reported"],
+            "$battle": {
+              ".write": "!data.exists() || 
+                        (newData.child('round').isNumber() 
+                            && newData.child('round').val() > data.child('round').val())",
+              ".validate": "newData.hasChildren(['href', 'region', 'time', 'status', 'reported', 'round']) 
+                            || newData.hasChildren(['posted'])",
+              "reported": {
+                ".validate": "newData.isNumber() && newData.val() <= now"
+              },
+              "status": {
+                ".validate": "newData.isString() && newData.val() == 'Epic Battle'"
+              },
+              "source": {
+                ".validate": "newData.isString() && (newData.val() === 'Madruga/MD' || newData.val() === 'e-bot')"
+              },
+              "time": {
+                ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}h:[0-9]{2}m$/)"
+              },
+              "round": {
+                ".validate": "newData.isNumber()"
+              },
+              "posted": {
+                ".write": "auth !== null && auth.uid == 'madruga'"
+              }
+            }
+          },
+          "D3": {
+            ".indexOn": ["reported"],
+            "$battle": {
+              ".write": "!data.exists() || 
+                        (newData.child('round').isNumber() 
+                            && newData.child('round').val() > data.child('round').val())",
+              ".validate": "newData.hasChildren(['href', 'region', 'time', 'status', 'reported', 'round']) 
+                            || newData.hasChildren(['posted'])",
+              "reported": {
+                ".validate": "newData.isNumber() && newData.val() <= now"
+              },
+              "status": {
+                ".validate": "newData.isString() && newData.val() == 'Epic Battle'"
+              },
+              "source": {
+                ".validate": "newData.isString() && (newData.val() === 'Madruga/MD' || newData.val() === 'e-bot')"
+              },
+              "time": {
+                ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}h:[0-9]{2}m$/)"
+              },
+              "round": {
+                ".validate": "newData.isNumber()"
+              },
+              "posted": {
+                ".write": "auth !== null && auth.uid == 'madruga'"
+              }
+            }
+          },
+          "D2": {
+            ".indexOn": ["reported"],
+            "$battle": {
+              ".write": "!data.exists() || 
+                        (newData.child('round').isNumber() 
+                            && newData.child('round').val() > data.child('round').val())",
+              ".validate": "newData.hasChildren(['href', 'region', 'time', 'status', 'reported', 'round']) 
+                            || newData.hasChildren(['posted'])",
+              "reported": {
+                ".validate": "newData.isNumber() && newData.val() <= now"
+              },
+              "status": {
+                ".validate": "newData.isString() && newData.val() == 'Epic Battle'"
+              },
+              "source": {
+                ".validate": "newData.isString() && (newData.val() === 'Madruga/MD' || newData.val() === 'e-bot')"
+              },
+              "time": {
+                ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}h:[0-9]{2}m$/)"
+              },
+              "round": {
+                ".validate": "newData.isNumber()"
+              },
+              "posted": {
+                ".write": "auth !== null && auth.uid == 'madruga'"
+              }
+            }
+          },
+          "D1": {
+            ".indexOn": ["reported"],
+            "$battle": {
+              ".write": "!data.exists() || 
+                        (newData.child('round').isNumber() 
+                            && newData.child('round').val() > data.child('round').val())",
+              ".validate": "newData.hasChildren(['href', 'region', 'time', 'status', 'reported', 'round']) 
+                            || newData.hasChildren(['posted'])",
+              "reported": {
+                ".validate": "newData.isNumber() && newData.val() <= now"
+              },
+              "status": {
+                ".validate": "newData.isString() && newData.val() == 'Epic Battle'"
+              },
+              "source": {
+                ".validate": "newData.isString() && (newData.val() === 'Madruga/MD' || newData.val() === 'e-bot')"
+              },
+              "time": {
+                ".validate": "newData.isString() && newData.val().matches(/^[0-9]{2}h:[0-9]{2}m$/)"
+              },
+              "round": {
+                ".validate": "newData.isNumber()"
+              },
+              "posted": {
+                ".write": "auth !== null && auth.uid == 'madruga'"
+              }
+            }
+          }
+        },
+        // irc nick -> er id
         "users": {
           ".read": true,
-          // $user = irc nick
-          "$user":{
+          "$user": {
             ".write": "auth !== null && auth.uid == 'madruga'",
             "id": {
               ".validate": "newData.isNumber()"
+            }
+          }
+        },
+        "md": {
+          "seen": {
+            ".read": true,
+            ".indexOn": ["height"],
+            "$user": {
+              ".write": true,
+              ".validate": "newData.hasChildren(['d', 'n', 't'])",
+              "d": {
+                ".validate": "newData.val() == 'D1'
+                                || newData.val() == 'D2'
+                                || newData.val() == 'D3'
+                                || newData.val() == 'D4'"
+              },
+              "n": {
+                ".validate": "newData.isString()"
+              },
+              "t": {
+                ".validate": "newData.isNumber() && newData.val() <= now"
+              },
+              "ip": {
+                ".validate": "newData.isString()"
+              }
+            }
+          }
+        },
+        "ips": {
+          ".read": true,
+          "$ip": {
+            ".write": true,
+            "$id" : {
+              ".validate": "newData.hasChildren(['nick', 'time'])",
+              "nick": {
+                ".validate": "newData.isString()"
+              },
+              "time": {
+                ".validate": "newData.isNumber() && newData.val() <= now"
+              }
             }
           }
         }

@@ -33,7 +33,6 @@ module.exports = function(client) {
 			text += battle.attacker + ' vs ' + battle.defender + '\n';
 		}
 		text += battle.region + '\n';
-		text += 'Round ' + battle.round + '\n';
 		text += 'Source: ' + (battle.source || 'unknown') + '\n';
 		text += 'http://www.erepublik.com/en' + battle.href;
 		
@@ -49,7 +48,6 @@ module.exports = function(client) {
 		}
 		text += battle.region + sep;
 		text += battle.time.irc.black() + sep;
-		text += 'Round ' + battle.round + sep;
 		text += 'http://www.erepublik.com/en' + battle.href + sep;
 		text += 'Source: ' + (battle.source || 'unknown') + sep;
 		
