@@ -21,7 +21,7 @@ function getNew(param, callback) {
 	var countryRegex = /[\d-\s]*([a-zA-Z]+)[\d-\s]*/;
 	if(countryRegex.test(param)) {
 	  var exec = countryRegex.exec(param.trim());
-	  country = exec[1].trim();
+   	  country = exec[1].trim();
 	}	
 
     console.log("requesting new users data for", country, date);
@@ -63,6 +63,7 @@ function irc(from, to, param, client) {
 }
 
 function telegram(from, to, param, bot) {
+    param = param.replace(/@\w+/, ''); // telegram sends /new@bot_name
 	getNew(param, function(error, response, body) {
 		if (error) {
 			bot.sendMessage({
