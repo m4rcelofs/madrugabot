@@ -10,7 +10,7 @@ function getNew(param, callback) {
 	var date = today.format('YYYY-MM-DD');
 	var country = 'Brazil';
 
-	var dateRegex = /\w*\s*(\d{4}-\d{2}-\d{2})\w*\s*/;
+	var dateRegex = /[\w\s]*(\d{4}-\d{2}-\d{2})[\w\s]*/;
 	if(dateRegex.test(param)) {
 	  var exec = dateRegex.exec(param.trim());
 	  if(moment.tz(exec[1], 'YYYY-MM-DD', erTimeZone).isBefore(today)) {
@@ -18,7 +18,7 @@ function getNew(param, callback) {
 	  }
 	}
 	
-	var countryRegex = /[\d-\s]*(\w+)[\d-\s]*/;
+	var countryRegex = /[\d-\s]*([a-zA-Z]+)[\d-\s]*/;
 	if(countryRegex.test(param)) {
 	  var exec = countryRegex.exec(param.trim());
 	  country = exec[1].trim();
