@@ -24,6 +24,7 @@ function getNew(param, callback) {
 	  country = exec[1].trim();
 	}	
 
+    console.log("requesting new users data for", country, date);
 	request.post({
 		url : 'http://ereptools.tk/newbs/result.php',
 		form : {
