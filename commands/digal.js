@@ -1,3 +1,3 @@
-module.exports = function () {
-	return 'Digal, Digal, pega no meu pau';
+module.exports = function (from, to, param, client) {
+	return 'Digal, Digal, pega no meu ' + (param || 'pau');
 };
