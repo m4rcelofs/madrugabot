@@ -19,8 +19,8 @@ function start() {
 
 function handleMessage(message) {
 	console.log(message);
-	if (message && message.text && /^\/[a-z]+/.test(message.text)) {
-		var parsed = /^\/([a-z]+)\s?(.*)/.exec(message.text);
+	if (message && message.text && /^\/[a-zA-Z]+/.test(message.text)) {
+		var parsed = /^\/([a-zA-Z]+)\s?(.*)/.exec(message.text);
 		if (!parsed) { return; }
 		var command = parsed[1];
 		var param = parsed[2];
