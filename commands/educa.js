@@ -1,11 +1,11 @@
 function irc(from, to, param, client) {
 	return 'Novo no jogo? Inscreva-se no EDUCA e consiga um tutor! ' + 
-			'http://www.erepublik.com/en/article/2488915'.irc.red();
+			'http://tinyurl.com/VouProEDUCA'.irc.red();
 }
 
 function telegram(from, to, param, bot) {
 	return 'Novo no jogo? Inscreva-se no EDUCA e consiga um tutor! \n' + 
-			'http://www.erepublik.com/en/article/2488915';
+			'http://tinyurl.com/VouProEDUCA';
 }
 
 module.exports = {
