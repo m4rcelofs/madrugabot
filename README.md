@@ -23,6 +23,8 @@
 
 * **MADRUGA_IMPORTIO_API**: Complete [import.io](https://import.io) API url, with key
 
+* **MADRUGA_TELEGRAM**: Telegram Bot Key (get from BotFather)
+
 
 `docker run -d --name madruga --net=host marcelofs/madrugabot` 
 
@@ -33,26 +35,26 @@
 Send your pull request with a custom command:
 
 	[./commands/{commandName}.js]
-	module.exports = function (from, to, param, client) {
+	function telegram(from, to, param, bot) {
+		// do your stuff here, use bot.sendMessage() if you need async messages
+		return 'synchronous message to be sent to channel';
+	}
+
+	function irc(from, to, param, client) {
 		// do your stuff here, use client.say() if you need async messages 
 		return 'synchronous message to be sent to channel';
 	};
 
-or
-
-    [./commands/{commandName}.js]
-    var run = function (from, to, param, client) {};
-    var otherFct = function() {};
-    module.exports = {
-      run: run,
-      exportedFct: otherFct
-    };
+	module.exports = {
+		irc : irc,
+		telegram : telegram
+	};	
 
 Check `/commands` for examples.
 
 #### Addons:
 
-Send your pull request with an addon to the core:
+Send your pull request with an addon to the core (mostly for IRC stuff):
 
 	[./addons/{addonName}.js]
 	module.exports = function (client) {
