@@ -7,18 +7,24 @@ function getNew(param, callback) {
 	
 	moment.locale('pt-br');
 	var today = moment.tz(erTimeZone);
+	var date = today.format('YYYY-MM-DD');
+	var country = 'Brazil';
 
-	var regex = /^(\d{4}-\d{2}-\d{2})? ?(\w+)?$/;
-	var exec = regex.exec(param ? param.trim() : '');
-	var date = exec[1];
-	if(!date || moment.tz(date, 'YYYY-MM-DD', erTimeZone).isAfter(today)) {
-		date = today.format('YYYY-MM-DD');
+	var dateRegex = /[\w\s]*(\d{4}-\d{2}-\d{2})[\w\s]*/;
+	if(dateRegex.test(param)) {
+	  var exec = dateRegex.exec(param.trim());
+	  if(moment.tz(exec[1], 'YYYY-MM-DD', erTimeZone).isBefore(today)) {
+		date = exec[1].trim();
+	  }
 	}
-	var country = exec[2] || 'Brazil';
 	
-	date = date.trim();
-	country = country.trim();
-	
+	var countryRegex = /[\d-\s]*([a-zA-Z]+)[\d-\s]*/;
+	if(countryRegex.test(param)) {
+	  var exec = countryRegex.exec(param.trim());
+   	  country = exec[1].trim();
+	}	
+
+    console.log("requesting new users data for", country, date);
 	request.post({
 		url : 'http://ereptools.tk/newbs/result.php',
 		form : {
@@ -57,6 +63,7 @@ function irc(from, to, param, client) {
 }
 
 function telegram(from, to, param, bot) {
+    param = param.replace(/@\w+/, ''); // telegram sends /new@bot_name
 	getNew(param, function(error, response, body) {
 		if (error) {
 			bot.sendMessage({
