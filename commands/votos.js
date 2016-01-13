@@ -41,7 +41,7 @@ function telegram(from, to, param, bot) {
   getVotes(function(votes) {
 	  var results = '\[<o>\] Eleições eBrasileiras \[<o>\]\n\n';
 	  votes.forEach(function(item){
-		  results += '[' + item.name + '](https://www.erepublik.com/br/citizen/profile/' + item.citizen_id + '):';
+		  results += '[' + item.name + '](https://www.erepublik.com/br/citizen/profile/' + item.citizen_id + '): ';
 		  results += item.votes;
 		  results += '\n';
 	  });
