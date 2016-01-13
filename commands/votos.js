@@ -5,9 +5,9 @@ var date = moment().date(5);
 if(date.isAfter(moment())) {
 	date = date.subtract(1, 'months');
 }
-var url = 'http://api.erepublik-deutschland.de/countryapi/cpvotes/9/' + date.format('YYYY-MM-DD');
 
 var getVotes = function(callback) {
+	var url = 'http://api.erepublik-deutschland.de/countryapi/cpvotes/9/' + date.format('YYYY-MM-DD');
 	console.log('requesting votes from server', url);
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
@@ -46,7 +46,7 @@ function telegram(from, to, param, bot) {
 		  results += item.votes;
 		  results += '\n';
 	  });
-	  results += 'Última atualização: [' + votes[0].added + '](' + url+ ')';
+	  results += 'Última atualização: [' + votes[0].added + '](http://erepublik-deutschland.de/en/tools/cpelection/9/' + date.format('YYYY-MM-DD') + ')';
 	  bot.sendMessage({
 			chat_id: to.id,
 	        text: results,
