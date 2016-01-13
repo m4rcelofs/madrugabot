@@ -1,12 +1,13 @@
 var moment = require('moment');
 var request = require('request');
 
+var date = moment().date(5);
+if(date.isAfter(moment())) {
+	date = date.subtract(1, 'months');
+}
+var url = 'http://api.erepublik-deutschland.de/countryapi/cpvotes/9/' + date.format('YYYY-MM-DD');
+
 var getVotes = function(callback) {
-	var date = moment().date(5);
-	if(date.isAfter(moment())) {
-		date = date.subtract(1, 'months');
-	}
-	var url = 'http://api.erepublik-deutschland.de/countryapi/cpvotes/9/' + date.format('YYYY-MM-DD');
 	console.log('requesting votes from server', url);
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
@@ -39,13 +40,13 @@ var format = function(votes) {
 
 function telegram(from, to, param, bot) {
   getVotes(function(votes) {
-	  var results = '\[<o>\] Eleições eBrasileiras \[<o>\]\n\n';
+	  var results = '`[<o>]` Eleições para CP `[<o>]`\n\n';
 	  votes.forEach(function(item){
 		  results += '[' + item.name + '](https://www.erepublik.com/br/citizen/profile/' + item.citizen_id + '): ';
 		  results += item.votes;
 		  results += '\n';
 	  });
-	  results += 'Última atualização: ' + votes[0].added;
+	  results += 'Última atualização: [' + votes[0].added + '](' + url+ ')';
 	  bot.sendMessage({
 			chat_id: to.id,
 	        text: results,
