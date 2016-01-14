@@ -32,7 +32,8 @@ function handleMessage(message) {
 			if ((typeof cmd !== 'function') && cmd.telegram) {
 				cmd = cmd.telegram;
 			}
-			var answer = cmd(message.from, message.chat, param ? param.trim() : '', bot);
+			param = param ? param.replace(/@\w+/, '').trim() : ''; // telegram sends /command@bot_name
+			var answer = cmd(message.from, message.chat, param, bot);
 			if (answer && quietList.indexOf(message.chat.id) === -1) {
 				bot.sendMessage({
 					chat_id: message.chat.id,
