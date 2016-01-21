@@ -1,5 +1,6 @@
 # MadrugaBot
 
+[![wercker status](https://app.wercker.com/status/6f1abee5dc6ee553c02ffd0e83b586f7/m/master "wercker status")](https://app.wercker.com/project/bykey/6f1abee5dc6ee553c02ffd0e83b586f7)
 
 ## Usage
 
