@@ -4,7 +4,7 @@ var moment = require('moment-timezone');
 var nock = require('nock');
 var sinon = require('sinon');
 
-var cmd = require('../commands/new.js');
+var cmd = require('../commands/new.js').irc;
 
 var erTimeZone = 'America/Los_Angeles';
 var today = moment().tz(erTimeZone).format('YYYY-MM-DD');
