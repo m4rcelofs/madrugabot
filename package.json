@@ -16,7 +16,7 @@
     "moment": "2.8.x",
     "moment-timezone": "0.3.x",
     "node-cache": "1.x.x",
-    "request": "2.51.x",
+    "request": "2.x.x",
     "node-telegram-bot": "0.1.9"
   },
   "devDependencies": {
