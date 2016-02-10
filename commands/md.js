@@ -99,7 +99,7 @@ var sendOrdersTelegram = function(data, to, bot) {
 	if(debug) {
 		console.log('sending orders');
 	}
-	var flag = '[<o>]';
+	var flag = '`[<o>]`';
 	var toSay = flag + 
 				' Ministério da Defesa - Ordens de Batalha ' + 
 				flag + 
@@ -108,8 +108,8 @@ var sendOrdersTelegram = function(data, to, bot) {
 	for(var i=0; i < lines.length - 1; i++) {
 		var cells = lines[i].split(',');
 		var type = (' (' + cells[2] + '): ');
-		var region = (' ' + cells[0] + ' ');
-		var link = (' ' + cells[1] + ' ');
+		var region = cells[0];
+		var link = cells[1];
 		var ally = (' ' + cells[4] + ' ');
 		var vs = (' ' + cells[5] + 'x' + cells[6] + ' ');
 		var enemy = (' ' + cells[7] + ' ');
@@ -119,12 +119,10 @@ var sendOrdersTelegram = function(data, to, bot) {
 		}
 	}
 	var latestUpdate = lines[lines.length - 1].split(',');
-	toSay += flag + (' Último update: ' + 
-						latestUpdate[1] + 
-						' @ ' + 
-						latestUpdate[2] + 
-					' ') + 
-			 flag + '\n';
+	toSay += 'Último update: ' + 
+				latestUpdate[1] + 
+				' @ ' + 
+				latestUpdate[2] + '\n';
 	toSay += flag + ' [Planilha](http://goo.gl/zLp8hn) ' + flag;
 	bot.sendMessage({
 		chat_id: to.id,
