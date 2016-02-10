@@ -1,9 +1,9 @@
 var request = require('request');
 var debug = process.env.MADRUGA_DEBUG || false;
 
-var url = 'https://docs.google.com/spreadsheet/pub' +
-			'?key=0AtKIBJ-62ILkdGNuYWNfZ2RhalVNaVltbkNTLUpEelE' +
-			'&single=true' +
+var url = 'https://docs.google.com/spreadsheets/d' +
+			'/1OIX6ugsuPPMAUhhostxNhLI7Lfg-o1vTkWE8tBK_NWc/pub' +
+			'?single=true' +
 			'&gid=0' +
 			'&range=A2%3AI8' +
 			'&output=csv';
