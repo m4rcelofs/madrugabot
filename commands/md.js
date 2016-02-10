@@ -115,7 +115,7 @@ var sendOrdersTelegram = function(data, to, bot) {
 		var enemy = (' ' + cells[7] + ' ');
 		var prio = ' ' + cells[3] + ' ';
 		if(cells[0]) {
-			toSay += region + type + '\n' + ally + vs + enemy + '\n' + prio + '\n' + link + '\n\n';	
+			toSay += '[' + region + '](' + link + ')' + type + '\n' + ally + vs + enemy + '\n' + prio + '\n\n';	
 		}
 	}
 	var latestUpdate = lines[lines.length - 1].split(',');
@@ -125,10 +125,11 @@ var sendOrdersTelegram = function(data, to, bot) {
 						latestUpdate[2] + 
 					' ') + 
 			 flag + '\n';
-	toSay += flag + ' Planilha:  http://goo.gl/zLp8hn ' + flag;
+	toSay += flag + ' [Planilha](http://goo.gl/zLp8hn) ' + flag;
 	bot.sendMessage({
 		chat_id: to.id,
         text: toSay,
+		parse_mode: 'Markdown',
         disable_web_page_preview: true
 	});
 	if(debug) {
