@@ -4,5 +4,5 @@ module.exports = function() {
 		process.exit(0);
 	};
     
-    setTimeout(restart, 1000 * 60 * 60 * 8);
+    setTimeout(restart, 1000 * 60 * 60);
 };
