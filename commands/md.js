@@ -1,9 +1,9 @@
 var request = require('request');
 var debug = process.env.MADRUGA_DEBUG || false;
 
-var url = 'https://docs.google.com/spreadsheet/pub' +
-			'?key=0AtKIBJ-62ILkdGNuYWNfZ2RhalVNaVltbkNTLUpEelE' +
-			'&single=true' +
+var url = 'https://docs.google.com/spreadsheets/d' +
+			'/1OIX6ugsuPPMAUhhostxNhLI7Lfg-o1vTkWE8tBK_NWc/pub' +
+			'?single=true' +
 			'&gid=0' +
 			'&range=A2%3AI8' +
 			'&output=csv';
@@ -27,7 +27,7 @@ function md(from, to, param, client, type) {
 		  			break;
 			}		
 		} else {
-			console.log(response.statusCode, error);
+			console.log(error);
 		}
 	});
 }
@@ -99,7 +99,7 @@ var sendOrdersTelegram = function(data, to, bot) {
 	if(debug) {
 		console.log('sending orders');
 	}
-	var flag = '[<o>]';
+	var flag = '`[<o>]`';
 	var toSay = flag + 
 				' Ministério da Defesa - Ordens de Batalha ' + 
 				flag + 
@@ -108,27 +108,26 @@ var sendOrdersTelegram = function(data, to, bot) {
 	for(var i=0; i < lines.length - 1; i++) {
 		var cells = lines[i].split(',');
 		var type = (' (' + cells[2] + '): ');
-		var region = (' ' + cells[0] + ' ');
-		var link = (' ' + cells[1] + ' ');
+		var region = cells[0];
+		var link = cells[1];
 		var ally = (' ' + cells[4] + ' ');
 		var vs = (' ' + cells[5] + 'x' + cells[6] + ' ');
 		var enemy = (' ' + cells[7] + ' ');
 		var prio = ' ' + cells[3] + ' ';
 		if(cells[0]) {
-			toSay += region + type + '\n' + ally + vs + enemy + '\n' + prio + '\n' + link + '\n\n';	
+			toSay += '[' + region + '](' + link + ')' + type + '\n' + ally + vs + enemy + '\n' + prio + '\n\n';	
 		}
 	}
 	var latestUpdate = lines[lines.length - 1].split(',');
-	toSay += flag + (' Último update: ' + 
-						latestUpdate[1] + 
-						' @ ' + 
-						latestUpdate[2] + 
-					' ') + 
-			 flag + '\n';
-	toSay += flag + ' Planilha:  http://goo.gl/zLp8hn ' + flag;
+	toSay += 'Último update: ' + 
+				latestUpdate[1] + 
+				' @ ' + 
+				latestUpdate[2] + '\n';
+	toSay += flag + ' [Planilha](http://goo.gl/zLp8hn) ' + flag;
 	bot.sendMessage({
 		chat_id: to.id,
         text: toSay,
+		parse_mode: 'Markdown',
         disable_web_page_preview: true
 	});
 	if(debug) {

@@ -63,7 +63,6 @@ function irc(from, to, param, client) {
 }
 
 function telegram(from, to, param, bot) {
-    param = param.replace(/@\w+/, ''); // telegram sends /new@bot_name
 	getNew(param, function(error, response, body) {
 		if (error) {
 			bot.sendMessage({
