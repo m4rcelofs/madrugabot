@@ -7,7 +7,7 @@ if(date.isAfter(moment())) {
 }
 
 var getVotes = function(callback) {
-	var url = 'http://api.erepublik-deutschland.de/countryapi/cpvotes/9/' + date.format('YYYY-MM-DD');
+	var url = 'https://www.erepublik-deutschland.de/api/countryapi.php?p=cpvotes&s=9&t=' + date.format('YYYY-MM-DD');
 	console.log('requesting votes from server', url);
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
