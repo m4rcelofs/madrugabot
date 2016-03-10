@@ -2,7 +2,7 @@ var request = require('request');
 
 var getEnergy = function(param, callback) {
 	param = (param || 'Brazil').trim();
-	var url = 'http://dev-dot-erpkapi.appspot.com/military?country=' + param;
+	var url = 'https://erpk.creativeslabs.com/API/military?country=' + param;
 	console.log('requesting as info from server', url);
 	request(url, function(error, response, body){
 		if (!error && response.statusCode === 200) {
