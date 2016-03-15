@@ -7,6 +7,7 @@ for(var env in process.env) {
 	}
 }
 
+require('opbeat').start()
 require('./telegram').start();
 require('./irc').start();
 
