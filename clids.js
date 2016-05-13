@@ -1,3 +1,0 @@
-module.exports = function (from, to, param, client) {
-	return 'Clids não! Clidslindo!';
-};
