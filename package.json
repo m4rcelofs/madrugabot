@@ -18,7 +18,7 @@
     "node-cache": "1.x.x",
     "opbeat": "*",
     "request": "2.x.x",
-    "node-telegram-bot": "0.1.9"
+    "node-telegram-bot": "depoio/node-telegram-bot#f089d5d0899fc8e2a9b1617081806b6ec621828b"
   },
   "devDependencies": {
 	"chai": "*",
