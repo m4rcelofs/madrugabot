@@ -8,7 +8,6 @@ function start() {
 	bot = new Bot({
 		token: process.env.MADRUGA_TELEGRAM || 'TOKEN HERE'
 	  })
-	  .enableAnalytics(process.env.MADRUGA_BOTAN_IO || '')
 	  .on('message', handleMessage)
 	  .on('error', function (message) {
 		  console.error('It seems like we lost the connection...');
